@@ -7,7 +7,6 @@ export enum UiText {
   SpinLoading = '...',
   Balance     = 'BALANCE',
   Bet         = 'BET',
-  WinBanner   = '🎉  BIG WIN!  🎉',
   SoundOn     = '🔊',
   SoundOff    = '🔇',
   SparkleChar = '✦',
