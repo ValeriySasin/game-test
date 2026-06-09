@@ -85,12 +85,12 @@ export class PreloadScene extends Phaser.Scene {
       bar.fillGradientStyle(PhaserColor.PurpleGrad1, PhaserColor.PinkGrad, PhaserColor.PinkGrad, PhaserColor.PurpleGrad1, 1);
       bar.fillRoundedRect(cx - 200, cy - 14, 400, 28, 14);
 
-      this.time.delayedCall(AnimDuration.SceneIntro, () => {
+      window.setTimeout(() => {
         this.cameras.main.fadeOut(AnimDuration.CameraFade, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => {
+        window.setTimeout(() => {
           this.scene.start(SCENES.GAME);
-        });
-      });
+        }, AnimDuration.CameraFade + 50);
+      }, AnimDuration.SceneIntro);
     });
   }
 
