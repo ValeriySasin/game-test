@@ -86,10 +86,14 @@ export class PreloadScene extends Phaser.Scene {
       bar.fillRoundedRect(cx - 200, cy - 14, 400, 28, 14);
 
       window.setTimeout(() => {
+        let transitioned = false;
+        const startGame = () => {
+          if (!transitioned) { transitioned = true; this.scene.start(SCENES.GAME); }
+        };
         this.cameras.main.fadeOut(AnimDuration.CameraFade, 0, 0, 0);
-        window.setTimeout(() => {
-          this.scene.start(SCENES.GAME);
-        }, AnimDuration.CameraFade + 50);
+        this.cameras.main.once('camerafadeoutcomplete', startGame);
+        // Fallback: if the camera event doesn't fire (background tab / throttle)
+        window.setTimeout(startGame, AnimDuration.CameraFade + 100);
       }, AnimDuration.SceneIntro);
     });
   }

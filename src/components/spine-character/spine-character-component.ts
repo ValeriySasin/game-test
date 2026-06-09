@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
+// SpinePlugin has no TypeScript declarations — all interactions with the Spine
+// game object use `any`. The surrounding logic is still fully type-safe.
 import Phaser from 'phaser';
 import { gsap } from 'gsap';
 import { ASSETS, SPINE_ANIMS } from '../../types/constants';
@@ -16,7 +19,6 @@ import { ASSETS, SPINE_ANIMS } from '../../types/constants';
  */
 export class SpineCharacterComponent {
   private scene:    Phaser.Scene;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private spineObj: any;                      // Spine game object (SpinePlugin type)
   private fallback: Phaser.GameObjects.Container | null = null;
 
@@ -35,22 +37,18 @@ export class SpineCharacterComponent {
 
   private init(): void {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
       const s = this.scene as any;
 
       // SpinePlugin adds .spine() to scene.add — check it is actually a function
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (typeof s.add?.spine !== 'function') {
         this.useFallback();
         return;
       }
 
       // Create spine game object: add.spine(x, y, key, animName, loop)
-      /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
       this.spineObj = s.add.spine(this.x, this.y, ASSETS.SPINE_GOBLIN, SPINE_ANIMS.IDLE, true);
       this.spineObj.setScale(0.35);
       this.spineObj.scaleX = -0.35;
-      /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
 
       this.currentAnim = SPINE_ANIMS.IDLE;
 
@@ -91,7 +89,6 @@ export class SpineCharacterComponent {
     if (this.spineObj) {
       try {
         this.currentAnim = anim;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
         this.spineObj.play(anim, loop, true);
       } catch (e) {
         console.warn(`[SpineCharacterComponent] Cannot play anim "${anim}":`, e);
@@ -142,7 +139,6 @@ export class SpineCharacterComponent {
   }
 
   destroy(): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     this.spineObj?.destroy();
     this.fallback?.destroy();
   }

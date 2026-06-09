@@ -4,6 +4,7 @@ import { LoginRequest, LoginResponse, SessionResponse } from '../types/auth.type
 const SESSION_ID = 'mock-session-' + Math.random().toString(36).slice(2);
 
 export const authMock = {
+  // Mock always succeeds — credentials are intentionally not validated in dev
   'POST /auth/login': (_body: LoginRequest): ApiResponse<LoginResponse> => ({
     ok: true,
     status: 200,

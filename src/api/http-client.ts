@@ -1,4 +1,4 @@
-import { ApiResponse, ApiError } from './types/common.types';
+import { ApiResponse, HttpError } from './types/common.types';
 import { mockRouter } from './mock/mock-router';
 
 const IS_MOCK = true; // flip to false when real backend is ready
@@ -37,12 +37,7 @@ async function request<T>(
 
   if (!res.ok) {
     const body = json as { message?: string; code?: string };
-    const err: ApiError = {
-      status: res.status,
-      message: body.message ?? 'Unknown error',
-      code: body.code,
-    };
-    throw new Error(err.message);
+    throw new HttpError(res.status, body.message ?? 'Unknown error', body.code);
   }
 
   return { data: json as T, status: res.status, ok: true };
