@@ -68,7 +68,8 @@
       "Bash(bash /tmp/check_uitext.sh)",
       "Bash(awk -F':' '{print $1}')",
       "Bash(bash /tmp/check_assets.sh)",
-      "Bash(bash /tmp/check_spine.sh)"
+      "Bash(bash /tmp/check_spine.sh)",
+      "Bash(npm install *)"
     ]
   }
 }

@@ -4,7 +4,7 @@ import { LoginRequest, LoginResponse, SessionResponse } from '../types/auth.type
 const SESSION_ID = 'mock-session-' + Math.random().toString(36).slice(2);
 
 export const authMock = {
-  'POST /auth/login': (body: LoginRequest): ApiResponse<LoginResponse> => ({
+  'POST /auth/login': (_body: LoginRequest): ApiResponse<LoginResponse> => ({
     ok: true,
     status: 200,
     data: {
@@ -14,7 +14,7 @@ export const authMock = {
     },
   }),
 
-  'POST /auth/logout': (): ApiResponse<{}> => ({
+  'POST /auth/logout': (): ApiResponse<Record<string, never>> => ({
     ok: true,
     status: 200,
     data: {},

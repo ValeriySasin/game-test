@@ -38,6 +38,7 @@ export class SpinButtonComponent {
   private setupInteractivity(): void {
     this.bg.setInteractive(
       new Phaser.Geom.Circle(0, 0, SpinBtn.HitR),
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       Phaser.Geom.Circle.Contains,
     );
 

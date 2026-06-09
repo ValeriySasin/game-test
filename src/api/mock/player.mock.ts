@@ -7,7 +7,7 @@ import {
   UpdateSettingsRequest,
 } from '../types/player.types';
 
-let profile: PlayerProfile = {
+const profile: PlayerProfile = {
   id: 'player-001',
   username: 'Player1',
   balance: 1000,

@@ -3,7 +3,8 @@ import { authMock } from './auth.mock';
 import { playerMock } from './player.mock';
 import { gameMock } from './game.mock';
 
-type MockHandler = (body?: any) => ApiResponse<any>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type MockHandler = (body?: any) => ApiResponse<unknown>;
 
 const handlers: Record<string, MockHandler> = {
   ...authMock,
@@ -20,11 +21,7 @@ export function mockRouter<T>(
   const handler = handlers[key];
 
   if (!handler) {
-    throw {
-      status: 404,
-      message: `[Mock] No handler for: ${key}`,
-      code: 'MOCK_NOT_FOUND',
-    };
+    throw new Error(`[Mock] No handler for: ${key}`);
   }
 
   return handler(body) as ApiResponse<T>;

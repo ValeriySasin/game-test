@@ -65,7 +65,7 @@ export function addLabelValue(
  * Makes a Phaser Graphics object using scene.make without adding to display list.
  */
 export function makeGraphics(scene: Phaser.Scene): Phaser.GameObjects.Graphics {
-  // @ts-ignore — Phaser types omit the `add` config key but it works at runtime
+  // @ts-expect-error — Phaser types omit the `add` config key but it works at runtime
   return scene.make.graphics({ x: 0, y: 0, add: false });
 }
 

@@ -7,8 +7,9 @@ import { GAME_WIDTH, GAME_HEIGHT } from './types/constants';
 window.gsap = gsap;
 
 // SpinePlugin sets window.SpinePlugin when its IIFE runs.
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require('phaser/plugins/spine/dist/SpinePlugin.min.js');
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
 const SpinePlugin = (window as any).SpinePlugin;
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -22,6 +23,7 @@ const config: Phaser.Types.Core.GameConfig = {
     scene: [
       {
         key: 'SpinePlugin',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         plugin: SpinePlugin,
         mapping: 'spine',
       },
@@ -47,4 +49,5 @@ const config: Phaser.Types.Core.GameConfig = {
 };
 
 const game = new Phaser.Game(config);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
 (window as any).game = game;

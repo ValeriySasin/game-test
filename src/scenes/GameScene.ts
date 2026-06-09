@@ -77,7 +77,7 @@ export class GameScene extends Phaser.Scene {
     this.soundManager = new SoundManagerComponent(this);
     this.soundManager.init();
 
-    this.loadPlayerData();
+    void this.loadPlayerData();
     this.playIntroAnimation();
   }
 

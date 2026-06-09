@@ -3,7 +3,7 @@ import { SymbolKey, SYMBOLS } from '../../types/constants';
 const STRIP_SYMBOL_COUNT = 20;
 
 export function useReel() {
-  let strip: SymbolKey[] = generateStrip();
+  const strip: SymbolKey[] = generateStrip();
   let currentIndex = 0;
 
   function generateStrip(): SymbolKey[] {

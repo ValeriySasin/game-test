@@ -32,18 +32,20 @@ async function request<T>(
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
 
   if (!res.ok) {
+    const body = json as { message?: string; code?: string };
     const err: ApiError = {
       status: res.status,
-      message: json.message ?? 'Unknown error',
-      code: json.code,
+      message: body.message ?? 'Unknown error',
+      code: body.code,
     };
-    throw err;
+    throw new Error(err.message);
   }
 
-  return { data: json, status: res.status, ok: true };
+  return { data: json as T, status: res.status, ok: true };
 }
 
 export const httpClient = {

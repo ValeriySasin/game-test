@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import { ASSETS } from '../types/constants';
-import { PhaserColor } from '../enums/colors';
 import { bakeTexture, bakeTextureRich, makeGraphics } from './draw-helpers';
 
 export class AssetGenerator {
@@ -145,19 +144,6 @@ export class AssetGenerator {
       // Bottom edge rim light
       g.fillStyle(0xffffff, 0.06);
       g.fillRoundedRect(14, 157, 172, 37, { tl: 0, tr: 0, bl: 28, br: 28 });
-    };
-
-    // 3D jewel (sphere) helper
-    const drawJewel3D = (
-      g: Phaser.GameObjects.Graphics,
-      x: number, y: number, r: number,
-      base: number, mid: number, bright: number,
-    ): void => {
-      g.fillStyle(0x000000, 0.35); g.fillCircle(x+r*0.15, y+r*0.15, r);
-      g.fillStyle(base, 1);        g.fillCircle(x, y, r);
-      g.fillStyle(mid, 1);         g.fillCircle(x-r*0.08, y-r*0.08, r*0.72);
-      g.fillStyle(bright, 1);      g.fillCircle(x-r*0.2, y-r*0.25, r*0.38);
-      g.fillStyle(0xffffff, 0.9);  g.fillCircle(x-r*0.3, y-r*0.35, r*0.18);
     };
 
     // ── SEVEN — bakeTextureRich at 2× (400×400 → displayed 200×200) ──────

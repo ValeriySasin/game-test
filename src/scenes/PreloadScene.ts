@@ -98,9 +98,10 @@ export class PreloadScene extends Phaser.Scene {
     // Audio is generated procedurally via ProceduralSounds (Web Audio API).
 
     // Load Spine spineboy (Spine 3.8 format via SpinePlugin)
-    // @ts-ignore — SpinePlugin extends the loader with .spine()
+    // @ts-expect-error — SpinePlugin extends the loader with .spine()
     if (this.load.spine) {
-      // @ts-ignore
+      // @ts-expect-error — SpinePlugin extends the loader with .spine()
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       this.load.spine(
         ASSETS.SPINE_GOBLIN,
         'assets/spine/spineboy.json',

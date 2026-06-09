@@ -15,13 +15,14 @@ let bgTimeout:   ReturnType<typeof setTimeout> | null = null;
 
 function getCtx(): AudioContext {
   if (!ctx) {
-    ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+  ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
     // Master gain for mute/unmute
     masterGain = ctx.createGain();
     masterGain.gain.value = 1;
     masterGain.connect(ctx.destination);
   }
-  if (ctx.state === 'suspended') ctx.resume();
+  if (ctx.state === 'suspended') void ctx.resume();
   return ctx;
 }
 
