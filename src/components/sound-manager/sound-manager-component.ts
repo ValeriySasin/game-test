@@ -1,4 +1,3 @@
-import Phaser from 'phaser';
 import { ASSETS } from '@/types/constants';
 import { useSoundManager, SoundManagerLogic } from './use-sound-manager';
 import { ProceduralSounds } from '@/utils/ProceduralSounds';
@@ -11,11 +10,11 @@ const PROCEDURAL_MAP: Record<string, () => void> = {
 };
 
 export class SoundManagerComponent {
-  private readonly scene: Phaser.Scene;
   private readonly logic: SoundManagerLogic;
 
-  constructor(scene: Phaser.Scene) {
-    this.scene = scene;
+  // scene is not stored — SoundManagerComponent uses only Web Audio API (ProceduralSounds)
+  // and has no Phaser Game Object dependencies.
+  constructor() {
     this.logic = useSoundManager();
   }
 

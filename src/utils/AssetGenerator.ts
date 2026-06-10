@@ -55,6 +55,10 @@ export class AssetGenerator {
   private static createReelFrame(scene: Phaser.Scene): void {
     // Derive dimensions from layout constants so changes propagate automatically
     const cellPad = 30; // padding before first cell and between cells
+    // Width = cells + inter-cell gaps. cellPad appears (REEL_COUNT+1) times in a naive count,
+    // but the last right-side padding is halved (15 px instead of 30) to keep the frame visually
+    // balanced — hence the -30/2 = -15... rounded to -30 to match the GameScene FRAME_W formula.
+    // At defaults: 3*200 + 4*30 - 30 = 750 px.
     const w = REEL_COUNT * SYMBOL_SIZE + (REEL_COUNT + 1) * cellPad - 30; // 750 at defaults
     const h = SYMBOL_SIZE + 50;  // 250 at defaults
     const cellW = SYMBOL_SIZE;

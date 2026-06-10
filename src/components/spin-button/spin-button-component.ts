@@ -7,7 +7,7 @@ import { SpinBtn } from '@/enums/ui-layout';
 import { AnimDuration } from '@/enums/animation';
 
 export class SpinButtonComponent {
-  private readonly scene:     Phaser.Scene;
+  // scene is not stored — only scene.input is needed for cursor changes, captured at construction.
   private readonly container: Phaser.GameObjects.Container;
   private readonly bg:        Phaser.GameObjects.Graphics;
   private readonly label:     Phaser.GameObjects.Text;
@@ -15,7 +15,6 @@ export class SpinButtonComponent {
   private readonly onClickCb: () => void;
 
   constructor(scene: Phaser.Scene, x: number, y: number, onClick: () => void) {
-    this.scene     = scene;
     this.onClickCb = onClick;
     this.logic     = useSpinButton();
     this.container = scene.add.container(x, y);
@@ -32,10 +31,10 @@ export class SpinButtonComponent {
     }).setOrigin(0.5);
 
     this.container.add([this.bg, this.label]);
-    this.setupInteractivity();
+    this.setupInteractivity(scene.input);
   }
 
-  private setupInteractivity(): void {
+  private setupInteractivity(input: Phaser.Input.InputPlugin): void {
     this.bg.setInteractive(
       new Phaser.Geom.Circle(0, 0, SpinBtn.HitR),
       // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -44,13 +43,13 @@ export class SpinButtonComponent {
 
     this.bg.on('pointerover', () => {
       if (!this.logic.isDisabled()) {
-        this.scene.input.setDefaultCursor('pointer');
+        input.setDefaultCursor('pointer');
         gsap.to(this.container, { scaleX: 1.07, scaleY: 1.07, duration: AnimDuration.Normal });
       }
     });
 
     this.bg.on('pointerout', () => {
-      this.scene.input.setDefaultCursor('default');
+      input.setDefaultCursor('default');
       gsap.to(this.container, { scaleX: 1, scaleY: 1, duration: AnimDuration.Normal });
     });
 

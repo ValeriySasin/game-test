@@ -31,6 +31,8 @@ export class GameScene extends Phaser.Scene {
   private reels:        ReelComponent[] = [];
   private spinButton!:  SpinButtonComponent;
   private soundManager!: SoundManagerComponent;
+  /** Stored so it can be killed if the scene shuts down mid-win. */
+  private winBannerTimeline: gsap.core.Timeline | null = null;
 
   private balanceText!: Phaser.GameObjects.Text;
   private betText!:     Phaser.GameObjects.Text;
@@ -74,7 +76,7 @@ export class GameScene extends Phaser.Scene {
     this.createPaytableModal();
     this.createGoblin();
 
-    this.soundManager = new SoundManagerComponent(this);
+    this.soundManager = new SoundManagerComponent();
     this.soundManager.init();
 
     void this.loadPlayerData();
@@ -489,8 +491,7 @@ export class GameScene extends Phaser.Scene {
   // ── Particles ─────────────────────────────────────────────────────────
 
   private createParticles(): void {
-    if (!this.textures.exists(ASSETS.PARTICLE)) return;
-
+    // ASSETS.PARTICLE is always available — AssetGenerator.generate() runs before this.
     this.particles = this.add.particles(0, 0, ASSETS.PARTICLE, {
       x:         { min: CX - 220, max: CX + 220 },
       y:         FRAME_CY - 30,
@@ -632,7 +633,10 @@ export class GameScene extends Phaser.Scene {
       this.winText.setText(`+$${amount}`);
       this.winBanner.setAlpha(0).setPosition(CX, FRAME_CY);
 
-      gsap.timeline()
+      this.winBannerTimeline?.kill();
+      this.winBannerTimeline = gsap.timeline({
+        onComplete: () => { this.winBannerTimeline = null; },
+      })
         .to(this.winBanner,   { alpha: 1, duration: AnimDuration.Slow, ease: AnimEase.Out })
         .from(this.winBanner, { scaleX: 0.5, scaleY: 0.5, duration: AnimDuration.SlowFade, ease: AnimEase.BackOutHard }, '<')
         .call(() => {
@@ -647,12 +651,19 @@ export class GameScene extends Phaser.Scene {
   }
 
   private hideWinBanner(): void {
+    this.winBannerTimeline?.kill();
+    this.winBannerTimeline = null;
     gsap.to(this.winBanner, { alpha: 0, duration: 0.15 });
   }
 
   // ── Lifecycle ─────────────────────────────────────────────────────────
 
   shutdown(): void {
+    this.winBannerTimeline?.kill();
+    this.winBannerTimeline = null;
+    this.reels.forEach(r => r.destroy());
+    gsap.killTweensOf(this.spinButton.getContainer());
+    this.goblin.destroy();
     this.soundManager.destroy();
   }
 

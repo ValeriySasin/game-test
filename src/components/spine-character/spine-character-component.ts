@@ -17,34 +17,32 @@ import { ASSETS, SPINE_ANIMS } from '@/types/constants';
  * (e.g. in Canvas mode or when spine assets fail to load).
  */
 export class SpineCharacterComponent {
+  // scene is kept as a field because onWin() schedules a delayedCall on it.
+  // x and y are only needed during construction and are not stored.
   private readonly scene: Phaser.Scene;
-  private readonly x: number;
-  private readonly y: number;
   private spineObj: any;                      // Spine game object (SpinePlugin type)
   private fallback: Phaser.GameObjects.Container | null = null;
   private currentAnim = '';
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     this.scene = scene;
-    this.x     = x;
-    this.y     = y;
-    this.init();
+    this.init(x, y);
   }
 
   // ── Init ──────────────────────────────────────────────────────────────
 
-  private init(): void {
+  private init(x: number, y: number): void {
     try {
       const s = this.scene as any;
 
       // SpinePlugin adds .spine() to scene.add — check it is actually a function
       if (typeof s.add?.spine !== 'function') {
-        this.useFallback();
+        this.useFallback(x, y);
         return;
       }
 
       // Create spine game object: add.spine(x, y, key, animName, loop)
-      this.spineObj = s.add.spine(this.x, this.y, ASSETS.SPINE_GOBLIN, SPINE_ANIMS.IDLE, true);
+      this.spineObj = s.add.spine(x, y, ASSETS.SPINE_GOBLIN, SPINE_ANIMS.IDLE, true);
       // Mirror horizontally (face right→left) while keeping vertical scale
       this.spineObj.scaleX = -0.35;
       this.spineObj.scaleY =  0.35;
@@ -53,7 +51,7 @@ export class SpineCharacterComponent {
 
     } catch (e) {
       console.warn('[SpineCharacterComponent] Spine init failed, using fallback:', e);
-      this.useFallback();
+      this.useFallback(x, y);
     }
   }
 
@@ -107,8 +105,8 @@ export class SpineCharacterComponent {
 
   // ── Fallback character ────────────────────────────────────────────────
 
-  private useFallback(): void {
-    this.fallback = this.scene.add.container(this.x, this.y);
+  private useFallback(x: number, y: number): void {
+    this.fallback = this.scene.add.container(x, y);
 
     const g = this.scene.add.graphics();
     // Body
@@ -133,8 +131,8 @@ export class SpineCharacterComponent {
 
     // Idle bob
     gsap.timeline({ repeat: -1 })
-      .to(this.fallback, { y: this.y - 8, duration: 0.9, ease: 'sine.inOut' })
-      .to(this.fallback, { y: this.y,     duration: 0.9, ease: 'sine.inOut' });
+      .to(this.fallback, { y: y - 8, duration: 0.9, ease: 'sine.inOut' })
+      .to(this.fallback, { y: y,     duration: 0.9, ease: 'sine.inOut' });
   }
 
   destroy(): void {

@@ -177,6 +177,42 @@ Background music and all SFX are synthesised at runtime using the Web Audio API.
 ### Mock API
 Spin results come from a lightweight in-browser mock (`src/api/mock/`) that simulates a real backend. Drop-in replaceable with a real HTTP endpoint — `http-client.ts`, `player.api.ts`, and `game.api.ts` are already wired up.
 
+### Reel animation — two-phase symbol pre-load
+
+Each reel uses three `Phaser.GameObjects.Image` instances (`image[0]`, `image[1]`, `image[2]`). During a spin they scroll downward by `SYMBOL_SIZE` (200 px) per step via a single GSAP tween on an `offset` value, with wrapping applied in `onUpdate`:
+
+```
+image[0]  y = -200 + raw   (off-screen top  →  center)
+image[1]  y =        raw   (center          →  off-screen bottom)
+image[2]              always off-screen (wraps behind the mask)
+```
+
+To guarantee that the target symbol is **never visibly swapped** when the reel stops, textures are loaded in two silent phases during the final steps:
+
+| Phase | When | What changes |
+|---|---|---|
+| **A** | First frame of the penultimate step — `image[0]` ≈ 10 px visible at the top edge | `image[0]` → target texture |
+| **B** | Last frame of the penultimate step — `image[1]` ≈ 10 px visible at the bottom edge | `image[1]`, `image[2]` → target & below textures; strip index advanced |
+
+By the time `onComplete` fires, every image already carries the correct texture — no texture changes occur on a fully-visible symbol.
+
+### Symbol texture dimensions and `setDisplaySize`
+
+The procedurally baked textures have **different native dimensions**:
+
+| Symbol | Native size |
+|---|---|
+| Gem | 200 × 200 px |
+| Crown, Coin, Seven | 400 × 400 px |
+
+`Phaser.GameObjects.Image.setTexture()` replaces the texture but **does not recalculate scale** — the previous `scaleX`/`scaleY` is kept. This means a Gem texture applied to an image that was previously showing a 400 × 400 symbol would appear at half size (100 × 100 px instead of 200 × 200 px).
+
+**Rule:** every `setTexture()` call is always immediately followed by `setDisplaySize(SYMBOL_SIZE, SYMBOL_SIZE)` to force the correct display size regardless of the texture's native dimensions. This is enforced in `updateSymbolTextures()` and in both pre-load phases.
+
+### Win animation lifecycle
+
+`playWinAnimation()` creates a GSAP `timeline()` and stores the reference in `this.winTimeline`. Before starting a new win animation (or a new spin), the previous timeline is explicitly killed with `winTimeline.kill()`. This prevents a timeline that finished mid-animation from leaving the symbol at a non-baseline scale, which was the root cause of symbols appearing enlarged after consecutive wins.
+
 ---
 
 ## 🧑‍💻 Scripts
