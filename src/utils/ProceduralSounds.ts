@@ -187,7 +187,8 @@ export const ProceduralSounds = {
 
   /** Release the AudioContext and reset all module-level state. Call from destroy(). */
   close(): void {
-    this.stopBgMusic();
+    this.stopBgMusic();   // sets bgStopFlag = true
+    bgStopFlag   = false; // reset fully so a future startBgMusic() works cleanly
     bgWasStarted = false;
     void ctx?.close();
     ctx         = null;

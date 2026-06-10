@@ -77,7 +77,7 @@ export const gameMock = {
     const result  = checkSymbols(symbols, body.bet);
 
     // Single shared balance — stays in sync with player.mock.ts
-    mockState.balance = mockState.balance - body.bet + result.winAmount;
+    mockState.balance = Math.max(0, mockState.balance - body.bet + result.winAmount);
 
     const spinId = randomId();
 

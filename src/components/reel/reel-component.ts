@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { gsap } from 'gsap';
-import { ASSETS, SYMBOL_SIZE, SymbolKey } from '@/types/constants';
+import { SYMBOL_ASSET_MAP, SYMBOL_SIZE, SymbolKey } from '@/types/constants';
 import { useReel, ReelLogic } from './use-reel';
 
 const VISIBLE_SYMBOLS = 1;
@@ -18,16 +18,6 @@ export class ReelComponent {
     this.buildVisuals();
   }
 
-  private getAssetKey(symbol: SymbolKey): string {
-    switch (symbol) {
-      case 'gem':   return ASSETS.SYMBOL_GEM;
-      case 'crown': return ASSETS.SYMBOL_CROWN;
-      case 'coin':  return ASSETS.SYMBOL_COIN;
-      case 'seven': return ASSETS.SYMBOL_SEVEN;
-      default:      throw new Error(`[ReelComponent] Unknown symbol: ${String(symbol)}`);
-    }
-  }
-
   private buildVisuals(): void {
     const count = VISIBLE_SYMBOLS + 2;
     const strip = this.logic.getStrip();
@@ -35,7 +25,7 @@ export class ReelComponent {
 
     for (let i = 0; i < count; i++) {
       const symKey = strip[(idx + i) % strip.length];
-      const img = this.scene.add.image(0, (i - 1) * SYMBOL_SIZE, this.getAssetKey(symKey));
+      const img = this.scene.add.image(0, (i - 1) * SYMBOL_SIZE, SYMBOL_ASSET_MAP[symKey]);
       img.setDisplaySize(SYMBOL_SIZE, SYMBOL_SIZE);
       this.container.add(img);
       this.symbolImages.push(img);
@@ -47,7 +37,7 @@ export class ReelComponent {
     const idx = this.logic.getCurrentIndex();
     for (let i = 0; i < this.symbolImages.length; i++) {
       const symKey = strip[(idx + i) % strip.length];
-      this.symbolImages[i].setTexture(this.getAssetKey(symKey));
+      this.symbolImages[i].setTexture(SYMBOL_ASSET_MAP[symKey]);
     }
   }
 
@@ -69,6 +59,8 @@ export class ReelComponent {
       const totalDistance = totalSymbols * SYMBOL_SIZE;
 
       const obj = { offset: 0 };
+      // Capture index once so onUpdate computes absolute position (not cumulative deltas)
+      const startIndex = this.logic.getCurrentIndex();
 
       gsap.to(obj, {
         offset: totalDistance,
@@ -86,7 +78,7 @@ export class ReelComponent {
             this.symbolImages[i].y = posY;
           }
 
-          const newIndex = (this.logic.getCurrentIndex() + stepsMoved) % strip.length;
+          const newIndex = (startIndex + stepsMoved) % strip.length;
           if (newIndex !== this.logic.getCurrentIndex()) {
             this.logic.setCurrentIndex(newIndex);
             this.updateSymbolTextures();

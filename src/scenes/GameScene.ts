@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import {
   SCENES, GAME_WIDTH, GAME_HEIGHT, ASSETS,
   REEL_COUNT, SYMBOL_SIZE, REEL_SPACING, SPIN_STAGGER,
-  PAYTABLE,
+  PAYTABLE, SYMBOL_ASSET_MAP,
 } from '@/types/constants';
 import { ReelComponent } from '@/components/reel/reel-component';
 import { SpinButtonComponent } from '@/components/spin-button/spin-button-component';
@@ -382,14 +382,6 @@ export class GameScene extends Phaser.Scene {
 
     container.add([overlay, panel, title]);
 
-    // Symbol asset key map
-    const symbolAsset: Record<string, string> = {
-      seven: ASSETS.SYMBOL_SEVEN,
-      gem:   ASSETS.SYMBOL_GEM,
-      crown: ASSETS.SYMBOL_CROWN,
-      coin:  ASSETS.SYMBOL_COIN,
-    };
-
     const rowStartY = -MODAL_H / 2 + 110;
     const rowHeight = 76;
 
@@ -399,7 +391,7 @@ export class GameScene extends Phaser.Scene {
       // Symbol images
       const count = row.count;
       const sym   = row.symbols[0];
-      const asset = symbolAsset[sym] ?? ASSETS.SYMBOL_COIN;
+      const asset = SYMBOL_ASSET_MAP[sym];
 
       for (let j = 0; j < count; j++) {
         const imgX = -280 + j * 70;
@@ -544,6 +536,9 @@ export class GameScene extends Phaser.Scene {
       this.state.betStepIndex = idx >= 0 ? idx : 0;
       this.state.bet          = steps[this.state.betStepIndex];
       this.betText.setText(`$${this.state.bet}`);
+      // Sync edge-button opacity to the loaded betStepIndex (same logic as changeBet)
+      this.betMinusBtn.setAlpha(this.state.betStepIndex === 0                       ? 0.35 : 1);
+      this.betPlusBtn.setAlpha( this.state.betStepIndex === this.state.betSteps.length - 1 ? 0.35 : 1);
       this.updateBalance();
     } catch (e) {
       console.error('Failed to load player data', e);

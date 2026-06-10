@@ -58,6 +58,14 @@ export interface PaytableRow {
   label:      string;
 }
 
+/** Single source of truth: maps SymbolKey → texture asset key */
+export const SYMBOL_ASSET_MAP: Record<SymbolKey, string> = {
+  gem:   ASSETS.SYMBOL_GEM,
+  crown: ASSETS.SYMBOL_CROWN,
+  coin:  ASSETS.SYMBOL_COIN,
+  seven: ASSETS.SYMBOL_SEVEN,
+};
+
 export const PAYTABLE: PaytableRow[] = [
   { symbols: ['seven'], count: 3, multiplier: 50, label: 'JACKPOT!' },
   { symbols: ['gem'],   count: 3, multiplier: 20, label: 'BIG WIN'  },

@@ -67,6 +67,10 @@ export class PreloadScene extends Phaser.Scene {
       color:      CssColor.LavenderUI,
     }).setOrigin(0.5);
 
+    this.load.on('loaderror', (file: Phaser.Loader.File) => {
+      console.warn('[PreloadScene] Failed to load asset:', file.key, file.src);
+    });
+
     this.load.on('progress', (value: number) => {
       bar.clear();
       const barW = 400 * value;
