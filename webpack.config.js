@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = (env, argv) => {
   const isDev = argv.mode === 'development';
@@ -44,6 +45,11 @@ module.exports = (env, argv) => {
             noErrorOnMissing: true,
           },
         ],
+      }),
+      new webpack.DefinePlugin({
+        'process.env.USE_MOCK':     JSON.stringify(process.env.USE_MOCK     ?? 'true'),
+        'process.env.API_BASE_URL': JSON.stringify(process.env.API_BASE_URL ?? 'https://api.lucky-reels.com/v1'),
+        'process.env.NODE_ENV':     JSON.stringify(argv.mode),
       }),
     ],
     devServer: {
