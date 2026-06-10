@@ -25,13 +25,3 @@ export type SpinResponse =
   | (SpinBase & { isWin: true;  winAmount: number; winLabel: string })
   | (SpinBase & { isWin: false; winAmount: 0;      winLabel: '' });
 
-export interface SpinHistoryItem {
-  spinId: string;
-  timestamp: number;
-  bet: number;
-  symbols: [SymbolKey, SymbolKey, SymbolKey];
-  isWin: boolean;
-  winAmount: number;
-}
-
-export type SpinHistory = SpinHistoryItem[];

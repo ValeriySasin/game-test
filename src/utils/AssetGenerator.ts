@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { ASSETS } from '@/types/constants';
+import { ASSETS, REEL_COUNT, SYMBOL_SIZE, REEL_SPACING } from '@/types/constants';
 import { bakeTexture, bakeTextureRich, makeGraphics } from './draw-helpers';
 
 export class AssetGenerator {
@@ -53,8 +53,17 @@ export class AssetGenerator {
   }
 
   private static createReelFrame(scene: Phaser.Scene): void {
-    // SYMBOL_SIZE=200, REEL_SPACING=30 → FRAME_W=750, FRAME_H=250
-    const w = 750, h = 250;
+    // Derive dimensions from layout constants so changes propagate automatically
+    const cellPad = 30; // padding before first cell and between cells
+    const w = REEL_COUNT * SYMBOL_SIZE + (REEL_COUNT + 1) * cellPad - 30; // 750 at defaults
+    const h = SYMBOL_SIZE + 50;  // 250 at defaults
+    const cellW = SYMBOL_SIZE;
+    // Build cell x-offsets: cellPad, cellPad + cellW + REEL_SPACING, ...
+    const cells: number[] = Array.from(
+      { length: REEL_COUNT },
+      (_, i) => cellPad + i * (cellW + REEL_SPACING),
+    );
+
     bakeTexture(scene, ASSETS.REEL_FRAME, w, h, g => {
       // Outer glow
       g.fillStyle(0xffd700, 0.08);
@@ -68,10 +77,8 @@ export class AssetGenerator {
       g.fillStyle(0x070320, 1);
       g.fillRoundedRect(0, 0, w, h, 28);
 
-      // Cell backgrounds — 3 cells matching reel positions
-      // cells start at x=30, each 200px wide, gap of 30
-      const cellY = 16, cellH = h - 32, cellW = 200;
-      const cells = [30, 260, 490];   // 30, 30+200+30=260, 260+200+30=490
+      // Cell backgrounds
+      const cellY = 16, cellH = h - 32;
       for (const cx of cells) {
         g.fillStyle(0x000000, 0.5);
         g.fillRoundedRect(cx + 2, cellY + 2, cellW, cellH, 12);
@@ -81,10 +88,12 @@ export class AssetGenerator {
         g.fillRoundedRect(cx + 2, cellY + 2, cellW - 4, 36, { tl: 10, tr: 10, bl: 0, br: 0 });
       }
 
-      // Gold vertical dividers
+      // Gold vertical dividers (between cells)
       g.lineStyle(2.5, 0xffd700, 0.55);
-      g.lineBetween(260, 14, 260, h - 14);
-      g.lineBetween(490, 14, 490, h - 14);
+      for (let i = 1; i < REEL_COUNT; i++) {
+        const divX = cells[i];
+        g.lineBetween(divX, 14, divX, h - 14);
+      }
 
       // Inner accent border
       g.lineStyle(2, 0xffee44, 0.4);

@@ -44,6 +44,7 @@ export class GameScene extends Phaser.Scene {
   private paytableModal!:   Phaser.GameObjects.Container;
   private goblin!:          SpineCharacterComponent;
 
+  // TODO: populate from auth token / playerApi.getProfile() when real backend is integrated
   private sessionId: string = 'mock-session';
 
   private state: GameState = {
@@ -541,10 +542,15 @@ export class GameScene extends Phaser.Scene {
       const idx           = steps.indexOf(clampedBet);
       this.state.betStepIndex = idx >= 0 ? idx : 0;
       this.state.bet          = steps[this.state.betStepIndex];
-      this.betText?.setText(`$${this.state.bet}`);
+      this.betText.setText(`$${this.state.bet}`);
       this.updateBalance();
     } catch (e) {
       console.error('Failed to load player data', e);
+      this.add.text(CX, UI_Y - 60, '⚠ Failed to load player data', {
+        fontFamily: FontFamily.Body,
+        fontSize:   FontSize.Sm,
+        color:      '#ff4444',
+      }).setOrigin(0.5).setDepth(50);
     }
   }
 
@@ -552,6 +558,9 @@ export class GameScene extends Phaser.Scene {
 
   private async onSpinClicked(): Promise<void> {
     if (this.state.isSpinning) return;
+
+    // Prevent spinning with insufficient balance
+    if (this.state.balance < this.state.bet) return;
 
     this.state.isSpinning = true;
     this.spinButton.setDisabled(true);
@@ -643,6 +652,12 @@ export class GameScene extends Phaser.Scene {
 
   private hideWinBanner(): void {
     gsap.to(this.winBanner, { alpha: 0, duration: 0.15 });
+  }
+
+  // ── Lifecycle ─────────────────────────────────────────────────────────
+
+  shutdown(): void {
+    this.soundManager.destroy();
   }
 
   private updateBalance(): void {

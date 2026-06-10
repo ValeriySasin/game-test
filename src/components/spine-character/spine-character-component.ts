@@ -11,8 +11,7 @@ import { ASSETS, SPINE_ANIMS } from '@/types/constants';
  * Animations used:
  *   idle  → standing still between spins
  *   run   → while reels are spinning
- *   jump  → win celebration
- *   walk  → return-to-idle after win
+ *   jump  → win celebration (then returns to idle after ~1.1 s)
  *
  * Falls back to a procedural animated rectangle if SpinePlugin is unavailable
  * (e.g. in Canvas mode or when spine assets fail to load).
@@ -46,8 +45,9 @@ export class SpineCharacterComponent {
 
       // Create spine game object: add.spine(x, y, key, animName, loop)
       this.spineObj = s.add.spine(this.x, this.y, ASSETS.SPINE_GOBLIN, SPINE_ANIMS.IDLE, true);
-      this.spineObj.setScale(0.35);
+      // Mirror horizontally (face right→left) while keeping vertical scale
       this.spineObj.scaleX = -0.35;
+      this.spineObj.scaleY =  0.35;
 
       this.currentAnim = SPINE_ANIMS.IDLE;
 

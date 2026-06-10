@@ -43,6 +43,10 @@ module.exports = (env, argv) => {
             from: 'assets',
             to: 'assets',
             noErrorOnMissing: true,
+            // NOTE: static assets (Spine JSON, atlas) are not cache-busted here because their
+            // paths are referenced by string in Phaser loader calls. To bust cache on asset
+            // changes, bump the version in package.json and pass it as a URL query param
+            // to the Phaser loader (e.g. scene.load.setPath(`assets?v=${VERSION}`)).
           },
         ],
       }),

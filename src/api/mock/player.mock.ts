@@ -6,10 +6,10 @@ export const mockState = {
   balance: 1000,
 };
 
-const profile: PlayerProfile = {
+// Static profile fields — balance always comes from mockState to stay in sync with game.mock
+const profileBase = {
   id: 'player-001',
   username: 'Player1',
-  balance: mockState.balance,
   level: 3,
   totalSpins: 42,
   totalWins: 11,
@@ -19,6 +19,6 @@ export const playerMock = {
   'GET /player/profile': (): ApiResponse<PlayerProfile> => ({
     ok: true,
     status: 200,
-    data: { ...profile, balance: mockState.balance },
+    data: { ...profileBase, balance: mockState.balance },
   }),
 };
