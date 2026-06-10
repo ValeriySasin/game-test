@@ -22,6 +22,8 @@ import { ReelFrame } from '@/enums/ui-layout';
 const CX       = GAME_WIDTH  / 2;
 const HEADER_Y = Math.round(GAME_HEIGHT * 0.07);
 const FRAME_CY = Math.round(GAME_HEIGHT * 0.38);
+// AssetGenerator bakes the frame sprite at 750 px; FRAME_W=720 intentionally
+// displays it slightly squished so the frame hugs the reels more tightly.
 const FRAME_W  = REEL_COUNT * SYMBOL_SIZE + (REEL_COUNT - 1) * REEL_SPACING + 60;
 const FRAME_H  = SYMBOL_SIZE + 50;
 const UI_Y     = Math.round(GAME_HEIGHT * 0.72);
@@ -229,13 +231,11 @@ export class GameScene extends Phaser.Scene {
       .setDisplaySize(GAME_WIDTH, 140);
 
     // Balance box
-    const balBg = this.add.graphics();
-    drawInfoBox(balBg, balX, UI_Y);
+    drawInfoBox(this.add.graphics(), balX, UI_Y);
     this.balanceText = addLabelValue(this, balX, UI_Y, UiText.Balance, `$${this.state.balance}`);
 
     // Bet box
-    const betBg = this.add.graphics();
-    drawInfoBox(betBg, betX, UI_Y);
+    drawInfoBox(this.add.graphics(), betX, UI_Y);
     this.betText = addLabelValue(this, betX, UI_Y, UiText.Bet, `$${this.state.bet}`, CssColor.Gold);
 
     // Bet − button
@@ -619,7 +619,7 @@ export class GameScene extends Phaser.Scene {
     this.spinButton.setLabel(UiText.SpinLabel);
   }
 
-  private async handleWin(amount: number, label: string): Promise<void> {
+  private handleWin(amount: number, label: string): Promise<void> {
     return new Promise(resolve => {
       this.updateBalance();
 
@@ -669,6 +669,9 @@ export class GameScene extends Phaser.Scene {
 
   private updateBalance(): void {
     this.balanceText.setText(`$${this.state.balance}`);
+    // Kill any in-flight scale animation before starting a new one so rapid
+    // calls (e.g. optimistic deduction followed immediately by a win) don't pile up.
+    gsap.killTweensOf(this.balanceText);
     gsap.timeline()
       .to(this.balanceText, { scaleX: 1.3, scaleY: 1.3, duration: AnimDuration.Normal })
       .to(this.balanceText, { scaleX: 1,   scaleY: 1,   duration: AnimDuration.Slow, ease: AnimEase.BackOutHard });
