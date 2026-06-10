@@ -1,5 +1,4 @@
 import { ApiResponse } from '../types/common.types';
-import { authMock } from './auth.mock';
 import { playerMock } from './player.mock';
 import { gameMock } from './game.mock';
 
@@ -10,7 +9,6 @@ import { gameMock } from './game.mock';
 type MockHandler = (body?: any) => ApiResponse<unknown>;
 
 const handlers: Record<string, MockHandler> = {
-  ...authMock,
   ...playerMock,
   ...gameMock,
 };

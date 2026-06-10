@@ -1,8 +1,6 @@
-export { authApi }   from './auth.api';
 export { playerApi } from './player.api';
 export { gameApi }   from './game.api';
 
-export type { LoginRequest, LoginResponse, SessionResponse }                           from './types/auth.types';
 export type { PlayerProfile, PlayerSettings, UpdateBalanceRequest, UpdateSettingsRequest } from './types/player.types';
 export type { GameConfig, SpinRequest, SpinResponse, SpinHistory, SpinHistoryItem }   from './types/game.types';
 export type { ApiResponse, ApiError }                                                  from './types/common.types';
