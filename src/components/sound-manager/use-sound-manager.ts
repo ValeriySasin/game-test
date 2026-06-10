@@ -7,7 +7,6 @@ export function useSoundManager() {
       enabled = !enabled;
       return enabled;
     },
-    setEnabled: (v: boolean) => { enabled = v; },
   };
 }
 

@@ -464,6 +464,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private showPaytableModal(): void {
+    if (this.state.isSpinning) return;
     this.paytableModal.setVisible(true);
     this.tweens.add({
       targets:  this.paytableModal,

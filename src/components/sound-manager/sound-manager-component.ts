@@ -50,6 +50,6 @@ export class SoundManagerComponent {
   }
 
   destroy(): void {
-    ProceduralSounds.stopBgMusic();
+    ProceduralSounds.close();
   }
 }

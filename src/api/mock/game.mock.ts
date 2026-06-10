@@ -33,6 +33,8 @@ function checkSymbols(
 }
 
 function generateWinSymbols(): [SymbolKey, SymbolKey, SymbolKey] {
+  // ASSUMPTION: every PAYTABLE entry uses a single symbol repeated (symbols[0] for all slots).
+  // If PAYTABLE ever gains mixed-symbol rows this function must be updated.
   const row = PAYTABLE[Math.floor(Math.random() * PAYTABLE.length)];
   const sym = row.symbols[0];
   if (row.count === 3) return [sym, sym, sym];

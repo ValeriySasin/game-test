@@ -9,7 +9,8 @@ let ctx: AudioContext | null = null;
 let masterGain: GainNode | null = null;
 
 // Background music state
-let bgScheduled = false;
+// bgWasStarted: true once startBgMusic() has been called (used in unmute to re-start the loop)
+let bgWasStarted = false;
 let bgStopFlag   = false;
 let bgTimeout:   ReturnType<typeof setTimeout> | null = null;
 
@@ -153,8 +154,8 @@ function scheduleBgLoop(startAt: number): void {
 export const ProceduralSounds = {
 
   startBgMusic(): void {
-    bgStopFlag   = false;
-    bgScheduled  = true;
+    bgStopFlag    = false;
+    bgWasStarted  = true;
     const c = getCtx();
     scheduleBgLoop(c.currentTime + 0.1);
   },
@@ -175,13 +176,22 @@ export const ProceduralSounds = {
     if (masterGain) masterGain.gain.value = 1;
     // Restart bg music — stopBgMusic sets bgStopFlag=true so we go through
     // startBgMusic to properly reset both flags and schedule a new loop.
-    if (bgScheduled) {
+    if (bgWasStarted) {
       this.startBgMusic();
     }
   },
 
   isBgRunning(): boolean {
-    return bgScheduled && !bgStopFlag;
+    return bgWasStarted && !bgStopFlag;
+  },
+
+  /** Release the AudioContext and reset all module-level state. Call from destroy(). */
+  close(): void {
+    this.stopBgMusic();
+    bgWasStarted = false;
+    void ctx?.close();
+    ctx         = null;
+    masterGain  = null;
   },
 
   // ── SFX ────────────────────────────────────────────────────────────────

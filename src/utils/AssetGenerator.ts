@@ -123,8 +123,8 @@ export class AssetGenerator {
   }
 
   private static createSymbols(scene: Phaser.Scene): void {
-    const S = 200; // canvas = SYMBOL_SIZE
-    const C = 100;
+    const S = SYMBOL_SIZE;
+    const C = S / 2; // center of the symbol canvas
 
     // ── 3D Card tile ────────────────────────────────────────────────────
     // Uses fillGradientStyle (Phaser rect gradient) + thick gold border + glass dome

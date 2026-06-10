@@ -37,8 +37,8 @@ async function request<T>(
   const json = await res.json();
 
   if (!res.ok) {
-    const body = json as { message?: string; code?: string };
-    throw new HttpError(res.status, body.message ?? 'Unknown error', body.code);
+    const errBody = json as { message?: string; code?: string };
+    throw new HttpError(res.status, errBody.message ?? 'Unknown error', errBody.code);
   }
 
   return { data: json as T, status: res.status, ok: true };
