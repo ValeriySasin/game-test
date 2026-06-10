@@ -5,8 +5,6 @@ export const GAME_HEIGHT = 1080;
 // Reel configuration
 export const REEL_COUNT = 3;
 export const SYMBOL_SIZE = 200;
-export const REEL_WIDTH = 220;
-export const REEL_HEIGHT = 220;
 export const REEL_SPACING = 30;
 
 // Spin configuration

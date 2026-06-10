@@ -12,5 +12,3 @@ export function useSpineCharacter() {
     getSpinAnim: () => SPINE_ANIMS.SPIN,
   };
 }
-
-export type SpineCharacterLogic = ReturnType<typeof useSpineCharacter>;

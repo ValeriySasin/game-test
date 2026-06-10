@@ -5,12 +5,6 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
-export interface ApiError {
-  status: number;
-  message: string;
-  code?: string;
-}
-
 export class HttpError extends Error {
   constructor(
     public readonly status: number,

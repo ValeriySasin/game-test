@@ -1,14 +1,6 @@
 # 🎰 Lucky Reels — HTML5 Slot Game
 
-A fully-featured browser slot machine built with **Phaser 3**, **TypeScript**, **GSAP animations**, and a **Spine 3.8 animated character**. Runs entirely in the browser — no server required for gameplay.
-
----
-
-## 📸 Preview
-
-| Preload Screen | Main Game | Win State |
-|---|---|---|
-| Animated star field + gradient progress bar | 3 reels, Spine character, sound toggle | Win banner + gold particles + character jump |
+A fully-featured browser slot machine built with **Phaser 3**, **TypeScript**, **GSAP animations**, and a **Spine 3.8 animated character**. Runs entirely in the browser — no server required.
 
 ---
 
@@ -17,8 +9,8 @@ A fully-featured browser slot machine built with **Phaser 3**, **TypeScript**, *
 - **3 reels × 1 row** — classic one-row slot layout
 - **4 symbol types** — Gem 💎, Crown 👑, Coin 🪙, Seven 7️⃣
 - **Paytable with multipliers** — including 50× Jackpot for triple sevens
-- **Spine 3.8 animated character** — idle / run / jump states driven by game events
-- **Procedural background music** — ambient loop generated in real-time via Web Audio API (no MP3 files needed)
+- **Spine 3.8 animated character** — idle / spin / win states driven by game events
+- **Procedural background music** — ambient casino loop generated in real-time via Web Audio API (no MP3 files)
 - **Sound effects** — click, spin, stop, win (also procedural)
 - **Sound toggle** — mute/unmute everything with one button
 - **Win banner + gold particle burst** on every win
@@ -39,8 +31,8 @@ A fully-featured browser slot machine built with **Phaser 3**, **TypeScript**, *
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/ValeriySasin/test-game.git
-cd test-game
+git clone https://github.com/ValeriySasin/game-test.git
+cd game-test
 ```
 
 ### 2. Install dependencies
@@ -49,15 +41,13 @@ cd test-game
 npm install
 ```
 
-> This may take a minute — it downloads Phaser, GSAP, TypeScript, Webpack, and the SpinePlugin.
-
 ### 3. Start the development server
 
 ```bash
 npm start
 ```
 
-Open **http://localhost:8090** in your browser. The game loads immediately.
+Open **http://localhost:8090** in your browser.
 
 ### 4. Build for production
 
@@ -65,13 +55,11 @@ Open **http://localhost:8090** in your browser. The game loads immediately.
 npm run build
 ```
 
-Output goes to `./dist/`. The folder contains a self-contained static site ready to deploy anywhere (GitHub Pages, Netlify, S3, etc.).
+Output goes to `./dist/` — a self-contained static site ready to deploy anywhere (GitHub Pages, Netlify, S3, etc.).
 
 ---
 
 ## 🐳 Docker
-
-Build and run a production nginx container with one command:
 
 ```bash
 docker build -t lucky-reels .
@@ -86,7 +74,7 @@ Open **http://localhost:3000**.
 
 1. The game opens with your balance set to **$1 000** and a bet of **$10**
 2. Click **SPIN** to spin the reels
-3. If all 3 symbols match — you win! Your balance increases by `bet × multiplier`
+3. If 3 symbols match — you win! Balance increases by `bet × multiplier`
 4. Click **ℹ** (top right) to view the full paytable
 5. Click **🔊** to toggle sound on/off
 
@@ -105,7 +93,7 @@ Open **http://localhost:3000**.
 ## 🗂️ Project Structure
 
 ```
-test-game/
+game-test/
 ├── assets/
 │   └── spine/
 │       ├── spineboy.json    # Spine 3.8 skeleton data
@@ -117,22 +105,28 @@ test-game/
 │   ├── main.ts              # Phaser game bootstrap + SpinePlugin setup
 │   ├── scenes/
 │   │   ├── PreloadScene.ts  # Loading screen — loads Spine assets, shows progress bar
-│   │   └── GameScene.ts     # Main game scene — reels, UI, win logic
+│   │   └── GameScene.ts     # Main game scene — reels, UI, win logic, state
 │   ├── components/
 │   │   ├── reel/            # Reel spin animation + symbol strip logic
 │   │   ├── spin-button/     # Animated SPIN button with hover/disabled states
 │   │   ├── spine-character/ # Spine character wrapper (idle/spin/win + fallback)
 │   │   └── sound-manager/   # Sound toggle + procedural audio calls
+│   ├── api/
+│   │   ├── http-client.ts   # fetch wrapper, throws HttpError on failure
+│   │   ├── player.api.ts    # getProfile(), getSettings(), updateBalance()
+│   │   ├── game.api.ts      # getConfig(), spin(), getHistory()
+│   │   ├── mock/            # In-browser mock backend (dev only, not committed to prod)
+│   │   └── types/           # ApiResponse, HttpError, player and game types
 │   ├── utils/
 │   │   ├── ProceduralSounds.ts  # Web Audio API — background music + SFX
 │   │   ├── AssetGenerator.ts    # Draws symbol textures procedurally (no image files)
 │   │   └── draw-helpers.ts      # Shared Graphics drawing utilities
-│   ├── api/                 # Mock spin API (simulates a real backend)
-│   ├── enums/               # Shared enums: colors, fonts, animation, UI text
+│   ├── enums/               # Colors, fonts, animation durations, UI text, layout
 │   └── types/
-│       ├── constants.ts     # Game config, asset keys, paytable
+│       ├── constants.ts     # Game config, asset keys, win combinations + multipliers
 │       ├── index.ts         # TypeScript interfaces
 │       └── global.d.ts      # Window type augmentations (gsap, SpinePlugin)
+├── eslint.config.mjs        # ESLint 9 flat config with TypeScript type-checked rules
 ├── Dockerfile               # Multi-stage build: Node build → nginx serve
 ├── webpack.config.js        # Webpack 5 dev + prod config
 ├── tsconfig.json            # TypeScript strict mode config
@@ -145,47 +139,55 @@ test-game/
 
 | Tool | Version | Purpose |
 |---|---|---|
-| [Phaser 3](https://phaser.io/) | 3.x | HTML5 game framework |
+| [Phaser 3](https://phaser.io/) | 3.90 | HTML5 game framework (WebGL) |
 | [SpinePlugin](https://phaser.io/news/2021/05/spine-plugin) | 3.8 | Spine skeletal animation in Phaser |
 | [TypeScript](https://www.typescriptlang.org/) | 5.x | Type-safe JavaScript (strict mode) |
 | [GSAP](https://gsap.com/) | 3.x | Reel spin, win banner, UI animations |
 | [Webpack 5](https://webpack.js.org/) | 5.x | Bundler with hot-reload dev server |
+| [ESLint 9](https://eslint.org/) | 9.x | Linting with TypeScript type-checked rules |
 | [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) | native | Procedural background music + SFX |
 | [Docker](https://docker.com/) | — | Multi-stage production container |
+
+---
+
+## ✏️ Common Customisations
+
+| What to change | Where |
+|---|---|
+| Background colour | `src/main.ts` → `backgroundColor` |
+| Game title text | `src/enums/ui-text.ts` |
+| Bet values (min / max / steps) | `src/api/mock/game.mock.ts` → `betMin`, `betMax`, `betSteps` |
+| Win combinations & multipliers | `src/types/constants.ts` → win table |
+| Background music & SFX | `src/utils/ProceduralSounds.ts` |
+| Symbol colours & shapes | `src/utils/AssetGenerator.ts` |
 
 ---
 
 ## 🏗️ Architecture Notes
 
 ### No external asset files (except Spine)
-All symbol textures and UI graphics are **drawn programmatically** using Phaser's `Graphics` API. This means the game works out-of-the-box with zero image downloads.
+All symbol textures and UI graphics are **drawn programmatically** using Phaser's `Graphics` API. Zero image downloads required.
 
 ### Spine character with fallback
-If the SpinePlugin fails to load (e.g. unsupported browser), the game automatically falls back to a procedurally drawn animated character using GSAP tweens — the game is always playable.
+If the SpinePlugin fails to load, the game automatically falls back to a procedurally drawn animated character using GSAP tweens — always playable.
 
 ### Procedural audio
-Background music and all SFX are synthesised at runtime using the Web Audio API. No MP3 files are needed and the game works fully offline.
+Background music and all SFX are synthesised at runtime using the Web Audio API. No MP3 files, works fully offline.
 
 ### Mock API
-Spin results come from a lightweight mock server (`src/api/mock/`) that runs in-browser. It simulates network delay and returns randomised results — drop-in replaceable with a real HTTP endpoint.
+Spin results come from a lightweight in-browser mock (`src/api/mock/`) that simulates a real backend. Drop-in replaceable with a real HTTP endpoint — `http-client.ts`, `player.api.ts`, and `game.api.ts` are already wired up.
 
 ---
 
-## 🧑‍💻 Development Tips
+## 🧑‍💻 Scripts
 
-### TypeScript type check (without building)
 ```bash
-npx tsc --noEmit
+npm start          # Dev server at http://localhost:8090
+npm run build      # Production build → ./dist
+npm run lint       # ESLint check
+npm run lint:fix   # ESLint auto-fix
+npm run typecheck  # TypeScript check without building
 ```
-
-### Check bundle size
-```bash
-npm run build
-du -sh dist/
-```
-
-### Open in VS Code / WebStorm
-Just open the project folder — both editors auto-detect `tsconfig.json` and `package.json`.
 
 ---
 
