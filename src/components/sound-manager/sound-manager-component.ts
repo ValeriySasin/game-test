@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
-import { ASSETS } from '../../types/constants';
+import { ASSETS } from '@/types/constants';
 import { useSoundManager, SoundManagerLogic } from './use-sound-manager';
-import { ProceduralSounds } from '../../utils/ProceduralSounds';
+import { ProceduralSounds } from '@/utils/ProceduralSounds';
 
 const PROCEDURAL_MAP: Record<string, () => void> = {
   [ASSETS.SFX_CLICK]: () => ProceduralSounds.click(),
@@ -11,8 +11,8 @@ const PROCEDURAL_MAP: Record<string, () => void> = {
 };
 
 export class SoundManagerComponent {
-  private scene: Phaser.Scene;
-  private logic: SoundManagerLogic;
+  private readonly scene: Phaser.Scene;
+  private readonly logic: SoundManagerLogic;
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;

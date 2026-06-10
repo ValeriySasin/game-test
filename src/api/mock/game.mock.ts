@@ -1,6 +1,6 @@
-import { ApiResponse } from '../types/common.types';
-import { GameConfig, SpinRequest, SpinResponse, SpinHistory, SpinHistoryItem } from '../types/game.types';
-import { PAYTABLE, SYMBOLS, SymbolKey } from '../../types/constants';
+import { ApiResponse } from '@/api/types/common.types';
+import { GameConfig, SpinRequest, SpinResponse, SpinHistory, SpinHistoryItem } from '@/api/types/game.types';
+import { PAYTABLE, SYMBOLS, SymbolKey } from '@/types/constants';
 
 const WIN_CHANCE = 0.28;
 

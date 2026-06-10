@@ -1,4 +1,4 @@
-import { SymbolKey, SYMBOLS } from '../../types/constants';
+import { SymbolKey, SYMBOLS } from '@/types/constants';
 
 const STRIP_SYMBOL_COUNT = 20;
 

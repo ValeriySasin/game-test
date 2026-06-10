@@ -1,11 +1,11 @@
-import { ApiResponse } from '../types/common.types';
+import { ApiResponse } from '@/api/types/common.types';
 import {
   PlayerProfile,
   PlayerSettings,
   UpdateBalanceRequest,
   UpdateBalanceResponse,
   UpdateSettingsRequest,
-} from '../types/player.types';
+} from '@/api/types/player.types';
 
 const profile: PlayerProfile = {
   id: 'player-001',

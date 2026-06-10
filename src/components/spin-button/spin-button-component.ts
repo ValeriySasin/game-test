@@ -1,18 +1,18 @@
 import Phaser from 'phaser';
 import { gsap } from 'gsap';
 import { useSpinButton, SpinButtonLogic } from './use-spin-button';
-import { FontFamily, FontSize } from '../../enums/fonts';
-import { CssColor, PhaserColor } from '../../enums/colors';
-import { SpinBtn } from '../../enums/ui-layout';
-import { AnimDuration, AnimEase } from '../../enums/animation';
+import { FontFamily, FontSize } from '@/enums/fonts';
+import { CssColor, PhaserColor } from '@/enums/colors';
+import { SpinBtn } from '@/enums/ui-layout';
+import { AnimDuration, AnimEase } from '@/enums/animation';
 
 export class SpinButtonComponent {
-  private scene:     Phaser.Scene;
-  private container: Phaser.GameObjects.Container;
-  private bg:        Phaser.GameObjects.Graphics;
-  private label:     Phaser.GameObjects.Text;
-  private logic:     SpinButtonLogic;
-  private onClickCb: () => void;
+  private readonly scene:     Phaser.Scene;
+  private readonly container: Phaser.GameObjects.Container;
+  private readonly bg:        Phaser.GameObjects.Graphics;
+  private readonly label:     Phaser.GameObjects.Text;
+  private readonly logic:     SpinButtonLogic;
+  private readonly onClickCb: () => void;
 
   constructor(scene: Phaser.Scene, x: number, y: number, onClick: () => void) {
     this.scene     = scene;

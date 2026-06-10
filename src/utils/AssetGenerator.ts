@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { ASSETS } from '../types/constants';
+import { ASSETS } from '@/types/constants';
 import { bakeTexture, bakeTextureRich, makeGraphics } from './draw-helpers';
 
 export class AssetGenerator {

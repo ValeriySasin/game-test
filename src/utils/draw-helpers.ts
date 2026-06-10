@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
-import { PhaserColor, CssColor } from '../enums/colors';
-import { FontFamily, FontSize } from '../enums/fonts';
-import { UiBox } from '../enums/ui-layout';
+import { PhaserColor, CssColor } from '@/enums/colors';
+import { FontFamily, FontSize } from '@/enums/fonts';
+import { UiBox } from '@/enums/ui-layout';
 
 /**
  * Draws a rounded UI info-box (balance / bet panel) onto a Graphics object.

@@ -1,4 +1,4 @@
-import { ApiResponse } from '../types/common.types';
+import { ApiResponse } from '@/api/types/common.types';
 import { playerMock } from './player.mock';
 import { gameMock } from './game.mock';
 

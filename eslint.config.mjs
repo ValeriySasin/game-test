@@ -46,6 +46,9 @@ export default tseslint.config(
         { checksVoidReturn: false },
       ],
 
+      // Don't require readonly on class properties — IDE hint is noisy
+      '@typescript-eslint/prefer-readonly': 'off',
+
       // Consistent code style
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prefer-const': 'error',

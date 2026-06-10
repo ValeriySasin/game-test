@@ -1,5 +1,5 @@
-import { PhaserColor, CssColor } from '../../enums/colors';
-import { UiText } from '../../enums/ui-text';
+import { PhaserColor, CssColor } from '@/enums/colors';
+import { UiText } from '@/enums/ui-text';
 
 export interface ButtonColors {
   fill: number;

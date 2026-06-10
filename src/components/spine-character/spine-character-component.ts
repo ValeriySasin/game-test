@@ -3,7 +3,7 @@
 // game object use `any`. The surrounding logic is still fully type-safe.
 import Phaser from 'phaser';
 import { gsap } from 'gsap';
-import { ASSETS, SPINE_ANIMS } from '../../types/constants';
+import { ASSETS, SPINE_ANIMS } from '@/types/constants';
 
 /**
  * SpineboyCharacter — wraps the real Spine 3.8 "spineboy-pro" skeleton.
@@ -18,12 +18,11 @@ import { ASSETS, SPINE_ANIMS } from '../../types/constants';
  * (e.g. in Canvas mode or when spine assets fail to load).
  */
 export class SpineCharacterComponent {
-  private scene:    Phaser.Scene;
+  private readonly scene: Phaser.Scene;
+  private readonly x: number;
+  private readonly y: number;
   private spineObj: any;                      // Spine game object (SpinePlugin type)
   private fallback: Phaser.GameObjects.Container | null = null;
-
-  private x: number;
-  private y: number;
   private currentAnim = '';
 
   constructor(scene: Phaser.Scene, x: number, y: number) {

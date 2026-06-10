@@ -1,4 +1,4 @@
-import { SPINE_ANIMS } from '../../types/constants';
+import { SPINE_ANIMS } from '@/types/constants';
 
 export function useSpineCharacter() {
   let currentAnim = '';

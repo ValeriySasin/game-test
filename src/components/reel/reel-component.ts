@@ -1,15 +1,15 @@
 import Phaser from 'phaser';
 import { gsap } from 'gsap';
-import { ASSETS, SYMBOL_SIZE, SymbolKey } from '../../types/constants';
+import { ASSETS, SYMBOL_SIZE, SymbolKey } from '@/types/constants';
 import { useReel, ReelLogic } from './use-reel';
 
 const VISIBLE_SYMBOLS = 1;
 
 export class ReelComponent {
-  private scene: Phaser.Scene;
-  private container: Phaser.GameObjects.Container;
-  private symbolImages: Phaser.GameObjects.Image[] = [];
-  private logic: ReelLogic;
+  private readonly scene: Phaser.Scene;
+  private readonly container: Phaser.GameObjects.Container;
+  private readonly symbolImages: Phaser.GameObjects.Image[] = [];
+  private readonly logic: ReelLogic;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     this.scene = scene;

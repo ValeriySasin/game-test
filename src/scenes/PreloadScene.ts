@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
-import { SCENES, GAME_WIDTH, GAME_HEIGHT, ASSETS } from '../types/constants';
-import { CssColor, PhaserColor } from '../enums/colors';
-import { FontFamily, FontSize } from '../enums/fonts';
-import { UiText } from '../enums/ui-text';
-import { AnimDuration } from '../enums/animation';
+import { SCENES, GAME_WIDTH, GAME_HEIGHT, ASSETS } from '@/types/constants';
+import { CssColor, PhaserColor } from '@/enums/colors';
+import { FontFamily, FontSize } from '@/enums/fonts';
+import { UiText } from '@/enums/ui-text';
+import { AnimDuration } from '@/enums/animation';
 
 export class PreloadScene extends Phaser.Scene {
   constructor() {
