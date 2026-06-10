@@ -16,7 +16,7 @@ import { GameState } from '@/types';
 import { CssColor, PhaserColor } from '@/enums/colors';
 import { FontFamily, FontSize } from '@/enums/fonts';
 import { UiText } from '@/enums/ui-text';
-import { AnimDuration, AnimEase } from '@/enums/animation';
+import { AnimDuration, AnimDurationMs, AnimEase } from '@/enums/animation';
 import { ReelFrame } from '@/enums/ui-layout';
 
 const CX       = GAME_WIDTH  / 2;
@@ -52,7 +52,6 @@ export class GameScene extends Phaser.Scene {
     betSteps: [1, 5, 10, 25, 50, 100],
     betStepIndex: 2, // default: 10
     isSpinning: false,
-    soundEnabled: true,
   };
 
   constructor() {
@@ -61,7 +60,7 @@ export class GameScene extends Phaser.Scene {
 
   create(): void {
     AssetGenerator.generate(this);
-    this.cameras.main.fadeIn(AnimDuration.CameraFade, 0, 0, 0);
+    this.cameras.main.fadeIn(AnimDurationMs.CameraFade, 0, 0, 0);
 
     this.createBackground();
     this.createHeader();
@@ -222,7 +221,7 @@ export class GameScene extends Phaser.Scene {
     const betX = CX + colSpacing;
 
     // Bottom panel background
-    this.add.image(CX, UI_Y, 'bottom_panel')
+    this.add.image(CX, UI_Y, ASSETS.BOTTOM_PANEL)
       .setOrigin(0.5, 0.5)
       .setDisplaySize(GAME_WIDTH, 140);
 
@@ -469,7 +468,7 @@ export class GameScene extends Phaser.Scene {
       targets:  this.paytableModal,
       alpha:    1,
       duration: 250,
-      ease:     'Sine.easeOut',
+      ease:     AnimEase.SineOut,
     });
   }
 
@@ -478,7 +477,7 @@ export class GameScene extends Phaser.Scene {
       targets:   this.paytableModal,
       alpha:     0,
       duration:  200,
-      ease:      'Sine.easeIn',
+      ease:      AnimEase.SineIn,
       onComplete: () => this.paytableModal.setVisible(false),
     });
   }
@@ -587,10 +586,15 @@ export class GameScene extends Phaser.Scene {
       this.reels.map((reel, i) => reel.spin(result.symbols[i], i * SPIN_STAGGER)),
     );
 
+    // Guard: scene may have been destroyed while reels were spinning
+    if (!this.scene.isActive(SCENES.GAME)) return;
+
     this.soundManager.play(ASSETS.SFX_STOP);
 
     // Brief pause so the player can see the landed symbols before the win banner appears
-    await new Promise<void>(r => this.time.delayedCall(500, r));
+    await new Promise<void>(r => this.time.delayedCall(AnimDurationMs.SpinResultPause, r));
+
+    if (!this.scene.isActive(SCENES.GAME)) return;
 
     if (result.isWin) {
       // Sync to server balance (bet already deducted visually; server added winAmount)
@@ -609,7 +613,7 @@ export class GameScene extends Phaser.Scene {
     this.spinButton.setLabel(UiText.SpinLabel);
   }
 
-  private async handleWin(amount: number, label: string = 'WIN'): Promise<void> {
+  private async handleWin(amount: number, label: string): Promise<void> {
     return new Promise(resolve => {
       this.updateBalance();
 

@@ -4,5 +4,4 @@ export interface GameState {
   betSteps: number[];
   betStepIndex: number;
   isSpinning: boolean;
-  soundEnabled: boolean;
 }

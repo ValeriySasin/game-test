@@ -173,10 +173,10 @@ export const ProceduralSounds = {
 
   unmute(): void {
     if (masterGain) masterGain.gain.value = 1;
-    // Resume bg music if it was running
-    if (bgScheduled && !bgStopFlag) {
-      const c = getCtx();
-      scheduleBgLoop(c.currentTime + 0.05);
+    // Restart bg music — stopBgMusic sets bgStopFlag=true so we go through
+    // startBgMusic to properly reset both flags and schedule a new loop.
+    if (bgScheduled) {
+      this.startBgMusic();
     }
   },
 

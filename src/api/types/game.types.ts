@@ -15,14 +15,15 @@ export interface SpinRequest {
   sessionId: string;
 }
 
-export interface SpinResponse {
-  symbols: [SymbolKey, SymbolKey, SymbolKey];
-  isWin: boolean;
-  winAmount: number;
-  winLabel: string;
+type SpinBase = {
+  symbols:    [SymbolKey, SymbolKey, SymbolKey];
   newBalance: number;
-  spinId: string;
-}
+  spinId:     string;
+};
+
+export type SpinResponse =
+  | (SpinBase & { isWin: true;  winAmount: number; winLabel: string })
+  | (SpinBase & { isWin: false; winAmount: 0;      winLabel: '' });
 
 export interface SpinHistoryItem {
   spinId: string;

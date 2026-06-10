@@ -17,8 +17,7 @@ export type SymbolKey = typeof SYMBOLS[number];
 // Scene keys
 export const SCENES = {
   PRELOAD: 'PreloadScene',
-  LOADING: 'LoadingScene',
-  GAME: 'GameScene',
+  GAME:    'GameScene',
 } as const;
 
 // Asset keys
@@ -33,6 +32,7 @@ export const ASSETS = {
   LOGO: 'logo',
   WIN_BANNER: 'win_banner',
   PARTICLE: 'particle',
+  BOTTOM_PANEL: 'bottom_panel',
 
   // Audio
   SFX_WIN: 'sfx_win',

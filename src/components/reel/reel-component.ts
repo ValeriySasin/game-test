@@ -24,6 +24,7 @@ export class ReelComponent {
       case 'crown': return ASSETS.SYMBOL_CROWN;
       case 'coin':  return ASSETS.SYMBOL_COIN;
       case 'seven': return ASSETS.SYMBOL_SEVEN;
+      default:      throw new Error(`[ReelComponent] Unknown symbol: ${String(symbol)}`);
     }
   }
 

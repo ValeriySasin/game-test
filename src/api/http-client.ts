@@ -1,8 +1,9 @@
 import { ApiResponse, HttpError } from './types/common.types';
 import { mockRouter } from './mock/mock-router';
 
-const IS_MOCK = true; // flip to false when real backend is ready
-const BASE_URL = 'https://api.lucky-reels.com/v1';
+// Set USE_MOCK=false in webpack DefinePlugin / .env to switch to real backend
+const IS_MOCK  = (process.env['USE_MOCK'] ?? 'true') !== 'false';
+const BASE_URL =  process.env['API_BASE_URL'] ?? 'https://api.lucky-reels.com/v1';
 const MOCK_DELAY_MS = 500;
 
 async function simulateDelay(): Promise<void> {

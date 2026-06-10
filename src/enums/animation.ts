@@ -1,3 +1,4 @@
+/** GSAP durations — seconds */
 export enum AnimDuration {
   Fast      = 0.1,
   Normal    = 0.15,
@@ -5,8 +6,13 @@ export enum AnimDuration {
   Slow      = 0.3,
   SlowFade  = 0.4,
   Entrance  = 0.65,
-  CameraFade = 500,   // ms (Phaser tweens)
-  SceneIntro = 400,   // ms
+}
+
+/** Phaser durations — milliseconds */
+export enum AnimDurationMs {
+  SceneIntro      = 400,
+  CameraFade      = 500,
+  SpinResultPause = 550,  // pause after reels stop before showing win banner
 }
 
 export enum AnimEase {
@@ -16,4 +22,5 @@ export enum AnimEase {
   BackOutHard = 'back.out(2)',
   SineInOut   = 'Sine.easeInOut',
   SineIn      = 'sine.in',
+  SineOut     = 'sine.out',
 }

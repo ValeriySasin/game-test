@@ -4,7 +4,7 @@ import { useSpinButton, SpinButtonLogic } from './use-spin-button';
 import { FontFamily, FontSize } from '@/enums/fonts';
 import { CssColor, PhaserColor } from '@/enums/colors';
 import { SpinBtn } from '@/enums/ui-layout';
-import { AnimDuration, AnimEase } from '@/enums/animation';
+import { AnimDuration } from '@/enums/animation';
 
 export class SpinButtonComponent {
   private readonly scene:     Phaser.Scene;
@@ -131,11 +131,5 @@ export class SpinButtonComponent {
   getContainer(): Phaser.GameObjects.Container {
     return this.container;
   }
-
-  pulse(): void {
-    gsap.timeline()
-      .to(this.container, { scaleX: 1.1, scaleY: 1.1, duration: AnimDuration.Medium, ease: AnimEase.Out })
-      .to(this.container, { scaleX: 1,   scaleY: 1,   duration: AnimDuration.Medium, ease: AnimEase.In })
-      .repeat(2);
-  }
 }
+

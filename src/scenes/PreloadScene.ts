@@ -3,7 +3,7 @@ import { SCENES, GAME_WIDTH, GAME_HEIGHT, ASSETS } from '@/types/constants';
 import { CssColor, PhaserColor } from '@/enums/colors';
 import { FontFamily, FontSize } from '@/enums/fonts';
 import { UiText } from '@/enums/ui-text';
-import { AnimDuration } from '@/enums/animation';
+import { AnimDurationMs } from '@/enums/animation';
 
 export class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -90,11 +90,11 @@ export class PreloadScene extends Phaser.Scene {
         const startGame = () => {
           if (!transitioned) { transitioned = true; this.scene.start(SCENES.GAME); }
         };
-        this.cameras.main.fadeOut(AnimDuration.CameraFade, 0, 0, 0);
+        this.cameras.main.fadeOut(AnimDurationMs.CameraFade, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', startGame);
         // Fallback: if the camera event doesn't fire (background tab / throttle)
-        window.setTimeout(startGame, AnimDuration.CameraFade + 100);
-      }, AnimDuration.SceneIntro);
+        window.setTimeout(startGame, AnimDurationMs.CameraFade + 100);
+      }, AnimDurationMs.SceneIntro);
     });
   }
 
